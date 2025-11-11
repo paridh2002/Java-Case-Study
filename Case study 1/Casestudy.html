@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Symbiosis Institute Nagpur</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    body {
+      background: url('https://weilcollegeadvising.com/wp-content/uploads/oxford-photo.jpeg') no-repeat center center fixed;
+      background-size: cover;
+      color: #333;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Background overlay */
+    .overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.5); /* reduced from 0.85 to 0.5 */
+  z-index: -1;
+}
+
+    /* Popup */
+    .popup {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.8);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 10000;
+    }
+    .popup-content {
+      background: white;
+      padding: 50px;
+      border-radius: 16px;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      animation: slideDown 0.6s ease-out;
+      max-width: 500px;
+    }
+    .popup-content i {
+      font-size: 3rem;
+      color: #8B0000;
+      margin-bottom: 20px;
+    }
+    .popup-content h1 {
+      font-size: 1.8rem;
+      margin-bottom: 10px;
+      color: #222;
+    }
+    .popup-content p {
+      font-size: 1rem;
+      color: #555;
+    }
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateY(-30px) scale(0.9);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    header {
+      background: linear-gradient(120deg, #800000, #b22222);
+      color: white;
+      padding: 30px 20px;
+      text-align: center;
+      font-size: 2.5rem;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      position: sticky;
+      top: 0;
+      z-index: 999;
+    }
+
+    .home {
+      text-align: center;
+      padding: 60px 30px;
+      background: transparent;
+      display: none;
+    }
+    .home h2 {
+      font-size: 2.2rem;
+      color: #8B0000;
+    }
+    .home p {
+      max-width: 700px;
+      margin: 20px auto;
+      font-size: 1.1rem;
+      color: #444;
+    }
+    .stats {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      margin-top: 30px;
+      flex-wrap: wrap;
+    }
+    .stat {
+      background: #fff;
+      border-radius: 15px;
+      padding: 20px 30px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+      text-align: center;
+      width: 200px;
+      transition: transform 0.3s;
+    }
+    .stat:hover {
+      transform: scale(1.05);
+    }
+    .stat h3 {
+      color: #800000;
+      font-size: 2rem;
+    }
+
+    .nav-container {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      flex-wrap: wrap;
+      margin: 50px 20px;
+    }
+    .nav-box {
+      background: white;
+      width: 280px;
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+      text-align: center;
+      transition: transform 0.3s, background 0.3s;
+      cursor: pointer;
+    }
+    .nav-box:hover {
+      transform: translateY(-10px);
+      background: #fff0f0;
+    }
+    .nav-box i {
+      font-size: 2.8rem;
+      margin-bottom: 15px;
+      color: #8B0000;
+      transition: transform 0.3s;
+    }
+    .nav-box:hover i {
+      transform: scale(1.2);
+    }
+    .nav-box h3 {
+      margin-top: 10px;
+      font-size: 1.3rem;
+    }
+
+    section {
+      max-width: 1000px;
+      margin: 40px auto;
+      background: white;
+      padding: 40px;
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      display: none;
+      animation: fadeIn 0.5s ease-in-out;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.98); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    section h2 {
+      color: #8B0000;
+      margin-bottom: 20px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 30px;
+    }
+    th, td {
+      padding: 12px;
+      border: 1px solid #ddd;
+      text-align: center;
+    }
+    th {
+      background: #8B0000;
+      color: white;
+    }
+    a {
+      color: #1a73e8;
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+
+    input, select, button {
+      margin: 10px 0;
+      padding: 12px;
+      width: 100%;
+      font-size: 1rem;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+    button {
+      background: #8B0000;
+      color: white;
+      border: none;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    button:hover {
+      background: #a52a2a;
+    }
+
+    @media(max-width: 768px) {
+      .nav-container, .stats {
+        flex-direction: column;
+        align-items: center;
+      }
+      .nav-box, .stat {
+        width: 90%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Background Overlay -->
+  <div class="overlay"></div>
+
+  <!-- Welcome Popup -->
+  <div class="popup" id="popup">
+    <div class="popup-content">
+      <i class="fas fa-graduation-cap"></i>
+      <h1>Welcome to Symbiosis Institute of Technology</h1>
+      <p>Innovate. Inspire. Impact.</p>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header>
+    Symbiosis Institute of Technology, Nagpur
+  </header>
+
+  <!-- Homepage -->
+  <div class="home" id="home">
+    <h2>Shaping Future Engineers & Innovators</h2>
+    <p>At SIT Nagpur, we provide cutting-edge education, global exposure, and a launchpad for innovation in the heart of Maharashtra.</p>
+    <div class="stats">
+      <div class="stat">
+        <h3>1200+</h3>
+        <p>Students</p>
+      </div>
+      <div class="stat">
+        <h3>80+</h3>
+        <p>Faculty</p>
+      </div>
+      <div class="stat">
+        <h3>25+</h3>
+        <p>Hackathons Won</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Navigation Boxes -->
+  <div class="nav-container">
+    <div class="nav-box" onclick="showSection('college')">
+      <i class="fas fa-university"></i>
+      <h3>College Details</h3>
+    </div>
+    <div class="nav-box" onclick="showSection('student')">
+      <i class="fas fa-user-graduate"></i>
+      <h3>Student Registration</h3>
+    </div>
+    <div class="nav-box" onclick="showSection('faculty')">
+      <i class="fas fa-chalkboard-teacher"></i>
+      <h3>Faculty Information</h3>
+    </div>
+  </div>
+
+  <!-- College Section -->
+  <section id="college">
+    <h2>About the College</h2>
+    <p>Symbiosis Institute of Technology (SIT), Nagpur, established in 2020 under Symbiosis International (Deemed University), aims to deliver world-class technical education with a focus on innovation and entrepreneurship.</p>
+    <p>The campus is located in Nagpur's lush green surroundings, equipped with state-of-the-art laboratories, smart classrooms, and an innovation hub. Courses include B.Tech in CSE, ECE, AI/ML, and more.</p>
+    <p>The institution emphasizes holistic development through academic excellence, cultural diversity, and global collaboration. Students are mentored by highly qualified faculty and participate in international exchange programs, hackathons, and research projects.</p>
+  </section>
+
+  <!-- Student Registration -->
+  <section id="student">
+    <h2>Student Registration</h2>
+    <form>
+      <input type="text" placeholder="Full Name" required />
+      <input type="text" placeholder="PRN Number" required />
+      <select required>
+        <option value="">Select Semester</option>
+        <option>1st</option><option>2nd</option><option>3rd</option><option>4th</option>
+        <option>5th</option><option>6th</option><option>7th</option><option>8th</option>
+      </select>
+      <input type="file" accept="application/pdf" required />
+      <button type="submit">Register</button>
+    </form>
+    <table>
+      <tr><th>Student Name</th><th>PRN</th><th>Semester</th><th>Resume</th></tr>
+      <tr><td>Rohan Patil</td><td>123456</td><td>5th</td><td><a href="#">View</a></td></tr>
+      <tr><td>Sneha Kapoor</td><td>123457</td><td>6th</td><td><a href="#">View</a></td></tr>
+      <tr><td>Amit Joshi</td><td>123458</td><td>4th</td><td><a href="#">View</a></td></tr>
+      <tr><td>Priya Rane</td><td>123459</td><td>3rd</td><td><a href="#">View</a></td></tr>
+      <tr><td>Neha Deshmukh</td><td>123460</td><td>2nd</td><td><a href="#">View</a></td></tr>
+      <tr><td>Karan Bhagat</td><td>123461</td><td>1st</td><td><a href="#">View</a></td></tr>
+    </table>
+  </section>
+
+  <!-- Faculty -->
+  <section id="faculty">
+    <h2>Faculty Information</h2>
+    <div>
+      <h3>Dr. Sunita Kulkarni – HoD, Computer Science</h3>
+      <p>PhD in Artificial Intelligence, 20+ years experience. Former visiting professor at IIT Bombay.</p>
+      <h3>Prof. Rajesh Mehta – Faculty, ECE</h3>
+      <p>Expert in Embedded Systems and IoT. Passionate about real-time systems and ARM processors.</p>
+      <h3>Dr. Neha Sharma – Faculty, AI/ML</h3>
+      <p>Published 10+ papers in ML conferences. Specialist in Deep Learning & NLP.</p>
+    </div>
+  </section>
+
+  <script>
+    window.onload = () => {
+      setTimeout(() => {
+        document.getElementById('popup').style.display = 'none';
+        document.getElementById('home').style.display = 'block';
+      }, 2500);
+    };
+
+    function showSection(id) {
+      document.querySelectorAll('section').forEach(sec => sec.style.display = 'none');
+      document.getElementById('home').style.display = 'none';
+      const section = document.getElementById(id);
+      if (section) {
+        section.style.display = 'block';
+      }
+    }
+  </script>
+</body>
+</html>
