@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grade Calculator</title>
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Custom styles */
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Custom animation for result display */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 dark:bg-gray-900 flex items-center justify-center min-h-screen p-4 transition-colors duration-300">
+
+    <div class="w-full max-w-md mx-auto">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl overflow-hidden">
+            <div class="p-8">
+                <div class="text-center mb-6">
+                    <h1 class="text-3xl font-bold text-gray-800 dark:text-white">Grade Calculator</h1>
+                    <p class="text-gray-500 dark:text-gray-400 mt-2">Enter your marks to find out your grade.</p>
+                </div>
+
+                <!-- Input section -->
+                <div class="space-y-4">
+                    <div>
+                        <label for="marks" class="text-sm font-medium text-gray-700 dark:text-gray-300">Marks (0-100)</label>
+                        <input type="number" id="marks" placeholder="e.g., 85" class="mt-1 block w-full px-4 py-3 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 transition">
+                    </div>
+                    <button id="calculateBtn" class="w-full bg-indigo-600 text-white font-semibold py-3 px-4 rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-900 transition-transform transform hover:scale-105">Calculate Grade</button>
+                </div>
+
+                <!-- Result Display Area -->
+                <div id="result-container" class="mt-8 text-center min-h-[100px] flex items-center justify-center">
+                    <!-- The result will be injected here by JavaScript -->
+                </div>
+            </div>
+        </div>
+        <footer class="text-center mt-6 text-sm text-gray-500 dark:text-gray-400">
+            <p>A simple tool for quick grade calculation.</p>
+        </footer>
+    </div>
+
+    <script>
+        const marksInput = document.getElementById('marks');
+        const calculateBtn = document.getElementById('calculateBtn');
+        const resultContainer = document.getElementById('result-container');
+
+        // Function to determine grade and styling
+        function getGradeInfo(marks) {
+            if (marks > 100 || marks < 0) {
+                return { grade: 'Invalid', message: 'Marks must be between 0 and 100.', color: 'text-red-500' };
+            } else if (marks > 90) {
+                return { grade: 'A+', message: 'Outstanding!', color: 'text-green-500' };
+            } else if (marks >= 80) {
+                return { grade: 'A', message: 'Excellent Work!', color: 'text-green-400' };
+            } else if (marks >= 66) {
+                return { grade: 'B', message: 'Good Job!', color: 'text-blue-500' };
+            } else if (marks >= 50) {
+                return { grade: 'C', message: 'You Passed.', color: 'text-yellow-500' };
+            } else {
+                return { grade: 'Fail', message: 'Needs Improvement.', color: 'text-red-500' };
+            }
+        }
+
+        // Function to display the result
+        function displayResult() {
+            // Clear previous result
+            resultContainer.innerHTML = '';
+            
+            const marks = parseFloat(marksInput.value);
+
+            if (isNaN(marks)) {
+                resultContainer.innerHTML = <p class="fade-in text-red-500 font-medium">Please enter a valid number.</p>;
+                return;
+            }
+
+            const { grade, message, color } = getGradeInfo(marks);
+
+            const resultElement = document.createElement('div');
+            resultElement.className = 'fade-in';
+            resultElement.innerHTML = `
+                <p class="text-gray-500 dark:text-gray-400">Your grade is</p>
+                <p class="text-5xl font-bold ${color}">${grade}</p>
+                <p class="mt-2 text-gray-600 dark:text-gray-300">${message}</p>
+            `;
+            
+            resultContainer.appendChild(resultElement);
+        }
+
+        // Event Listeners
+        calculateBtn.addEventListener('click', displayResult);
+        
+        // Allow pressing 'Enter' to calculate
+        marksInput.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter') {
+                displayResult();
+            }
+        });
+
+    </script>
+</body>
+</html>

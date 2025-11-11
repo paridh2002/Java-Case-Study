@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Min & Max Array Finder</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .card-shadow {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .result-highlight {
+            transition: all 0.3s ease-in-out;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 dark:bg-gray-900 flex items-center justify-center min-h-screen px-4">
+
+    <div class="w-full max-w-2xl mx-auto bg-white dark:bg-gray-800 rounded-2xl card-shadow overflow-hidden">
+        <div class="p-8">
+            <h1 class="text-3xl font-bold text-center text-gray-800 dark:text-white mb-2">Array Min & Max Finder</h1>
+            <p class="text-center text-gray-500 dark:text-gray-300 mb-8">Enter numbers separated by commas, or generate a random array.</p>
+
+            <!-- Input Section -->
+            <div class="mb-6">
+                <label for="arrayInput" class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">Your Array</label>
+                <textarea id="arrayInput" rows="4" class="w-full p-4 text-gray-700 dark:text-gray-200 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition" placeholder="e.g., 23, 5, 89, 1, 42, 15"></textarea>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex flex-col sm:flex-row gap-4 mb-8">
+                <button id="findButton" class="w-full bg-blue-600 text-white font-semibold py-3 px-6 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-300">
+                    Find Min & Max
+                </button>
+                <button id="generateButton" class="w-full bg-green-500 text-white font-semibold py-3 px-6 rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition duration-300">
+                    Generate Random Array
+                </button>
+                <button id="clearButton" class="w-full bg-gray-500 text-white font-semibold py-3 px-6 rounded-lg hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition duration-300">
+                    Clear
+                </button>
+            </div>
+
+            <!-- Result Section -->
+            <div id="result-container" class="opacity-0 transition-opacity duration-500">
+                <h2 class="text-xl font-semibold text-gray-800 dark:text-white mb-4 text-center">Results</h2>
+                <div class="flex flex-col md:flex-row justify-around items-center text-center gap-6">
+                    <div class="w-full md:w-1/2 p-6 bg-gray-50 dark:bg-gray-700 rounded-xl result-highlight">
+                        <h3 class="text-lg font-medium text-gray-500 dark:text-gray-300 mb-2">Minimum Value</h3>
+                        <p id="minValue" class="text-4xl font-bold text-blue-500">-</p>
+                    </div>
+                    <div class="w-full md:w-1/2 p-6 bg-gray-50 dark:bg-gray-700 rounded-xl result-highlight">
+                        <h3 class="text-lg font-medium text-gray-500 dark:text-gray-300 mb-2">Maximum Value</h3>
+                        <p id="maxValue" class="text-4xl font-bold text-green-500">-</p>
+                    </div>
+                </div>
+                <div id="errorMessage" class="mt-4 text-center text-red-500 font-medium"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const findButton = document.getElementById('findButton');
+        const generateButton = document.getElementById('generateButton');
+        const clearButton = document.getElementById('clearButton');
+        const arrayInput = document.getElementById('arrayInput');
+        const minValueElem = document.getElementById('minValue');
+        const maxValueElem = document.getElementById('maxValue');
+        const resultContainer = document.getElementById('result-container');
+        const errorMessageElem = document.getElementById('errorMessage');
+
+        // Function to find Min and Max
+        const findMinMax = () => {
+            const inputText = arrayInput.value.trim();
+            errorMessageElem.textContent = '';
+            
+            if (!inputText) {
+                showError('Please enter some numbers or generate an array.');
+                return;
+            }
+
+            // Convert input string to an array of numbers
+            const numbers = inputText
+                .split(',')
+                .map(item => item.trim())
+                .filter(item => item !== '')
+                .map(Number);
+            
+            // Check for invalid numbers (NaN)
+            if (numbers.some(isNaN)) {
+                showError('Invalid input. Please make sure all values are numbers separated by commas.');
+                return;
+            }
+
+            if (numbers.length === 0) {
+                 showError('The array is empty after processing. Please check your input.');
+                 return;
+            }
+
+            const min = Math.min(...numbers);
+            const max = Math.max(...numbers);
+
+            minValueElem.textContent = min;
+            maxValueElem.textContent = max;
+            resultContainer.classList.remove('opacity-0');
+        };
+
+        // Function to show an error message
+        const showError = (message) => {
+            minValueElem.textContent = '-';
+            maxValueElem.textContent = '-';
+            errorMessageElem.textContent = message;
+            resultContainer.classList.remove('opacity-0');
+        };
+
+        // Function to generate a random array
+        const generateRandomArray = () => {
+            const randomArray = Array.from({ length: 10 }, () => Math.floor(Math.random() * 200) - 100);
+            arrayInput.value = randomArray.join(', ');
+            findMinMax(); // Automatically find min/max after generating
+        };
+
+        // Function to clear input and results
+        const clearAll = () => {
+            arrayInput.value = '';
+            minValueElem.textContent = '-';
+            maxValueElem.textContent = '-';
+            errorMessageElem.textContent = '';
+            resultContainer.classList.add('opacity-0');
+        };
+
+        // Event Listeners
+        findButton.addEventListener('click', findMinMax);
+        generateButton.addEventListener('click', generateRandomArray);
+        clearButton.addEventListener('click', clearAll);
+        
+        // Allow pressing Enter in the textarea to trigger the find function
+        arrayInput.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter' && !event.shiftKey) {
+                event.preventDefault(); // Prevent new line
+                findMinMax();
+            }
+        });
+
+    </script>
+</body>
+</html>

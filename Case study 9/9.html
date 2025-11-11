@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seminar Schedule</title>
+    <!-- Load Tailwind CSS for modern styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom styles for the table to match the image */
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            max-width: 800px;
+            margin: 2rem auto;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            border: 1px solid #999;
+        }
+
+        th, td {
+            border: 1px solid #999;
+            padding: 0.75rem;
+            text-align: center;
+            vertical-align: middle;
+            font-size: 0.9rem;
+        }
+
+        /* Table header styles */
+        thead th {
+            background-color: #e5e7eb; /* Gray-200 */
+            font-weight: bold;
+        }
+        
+        /* Table body styles */
+        tbody th {
+            background-color: #f3f4f6; /* Gray-100 */
+            font-weight: bold;
+        }
+        
+        tbody td {
+            min-width: 100px;
+        }
+        
+        /* The clickable seminar topics */
+        .seminar-topic {
+            cursor: pointer;
+            font-weight: 600;
+            transition: background-color 0.2s;
+        }
+        
+        .seminar-topic:hover {
+            background-color: #f0f9ff; /* Sky-50 */
+        }
+
+        /* --- Custom Alert Box (Modal) Styles --- */
+        
+        /* The full-screen background overlay, hidden by default */
+        #alertModalOverlay {
+            display: none; /* Hidden by default */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            /* Use flexbox to center the modal */
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        /* The modal box itself */
+        #alertModalBox {
+            background-color: white;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            width: 90%;
+            max-width: 450px;
+            text-align: left;
+        }
+
+        /* The close button for the modal */
+        #alertModalClose {
+            background-color: #333;
+            color: white;
+            border: none;
+            padding: 0.6rem 1rem;
+            border-radius: 0.375rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            float: right;
+            margin-top: 1.5rem;
+        }
+        
+        #alertModalClose:hover {
+            background-color: #555;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+
+    <h1 class="text-3xl font-bold text-center pt-8">Seminar Schedule</h1>
+
+    <!-- The Schedule Table -->
+    <table role="table" aria-label="Seminar schedule">
+        <thead>
+            <tr>
+                <th rowspan="3">Day</th>
+                <th colspan="3">Seminar</th>
+            </tr>
+            <tr>
+                <th colspan="2">Schedule</th>
+                <th rowspan="2">Topic</th>
+            </tr>
+            <tr>
+                <th>Begin</th>
+                <th>End</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td rowspan="2">Monday</td>
+                <td rowspan="2" class="bg-yellow-100">8:00 a.m.</td>
+                <td rowspan="2" class="bg-blue-100">5:00 p.m.</td>
+                <!-- Clickable Topic -->
+                <td class="seminar-topic" data-day="Monday" data-time="8:00 a.m. - 5:00 p.m." data-topic="Introduction to XML" tabindex="0" role="button" aria-pressed="false">
+                    Introduction to XML
+                </td>
+            </tr>
+            <tr>
+                <!-- Clickable Topic -->
+                <td class="seminar-topic" data-day="Monday" data-time="8:00 a.m. - 5:00 p.m." data-topic="Validity: DTD and Relax NG" tabindex="0" role="button" aria-pressed="false">
+                    Validity: DTD and Relax NG
+                </td>
+            </tr>
+            <tr>
+                <td rowspan="3">Tuesday</td>
+                <td class="bg-yellow-100">8:00 a.m.</td>
+                <td class="bg-yellow-100">11:00 a.m.</td>
+                <!-- Clickable Topic -->
+                <td class="seminar-topic" data-day="Tuesday" data-time="8:00 a.m. - 11:00 a.m." data-topic="XPath" tabindex="0" role="button" aria-pressed="false">
+                    XPath
+                </td>
+            </tr>
+            <tr>
+                <td class="bg-yellow-100">11:00 a.m.</td>
+                <td class="bg-green-100">2:00 p.m.</td>
+                <!-- Clickable Topic -->
+                <td rowspan="2" class="seminar-topic" data-day="Tuesday" data-time="11:00 a.m. - 5:00 p.m." data-topic="XSL Transformations" tabindex="0" role="button" aria-pressed="false">
+                    XSL Transformations
+                </td>
+            </tr>
+            <tr>
+                <td class="bg-green-100">2:00 p.m.</td>
+                <td class="bg-blue-100">5:00 p.m.</td>
+            </tr>
+            <tr>
+                <td>Wednesday</td>
+                <td class="bg-yellow-100">8:00 a.m.</td>
+                <td class="bg-green-100">12:00 p.m.</td>
+                <!-- Clickable Topic -->
+                <td class="seminar-topic" data-day="Wednesday" data-time="8:00 a.m. - 12:00 p.m." data-topic="XSL Formatting Objects" tabindex="0" role="button" aria-pressed="false">
+                    XSL Formatting Objects
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <!-- --- Custom Alert Box (Modal) HTML --- -->
+    <div id="alertModalOverlay" aria-hidden="true">
+        <div id="alertModalBox" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+            <h2 id="modalTitle" class="text-xl font-bold mb-4">Seminar Details</h2>
+            <!-- The message will be inserted here by JavaScript -->
+            <div id="alertModalMessage"></div>
+            <button id="alertModalClose" type="button">Close</button>
+        </div>
+    </div>
+
+
+    <script>
+        // Wait for the DOM to be fully loaded before running script
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            // Get references to the modal elements
+            const modalOverlay = document.getElementById('alertModalOverlay');
+            const modalMessage = document.getElementById('alertModalMessage');
+            const modalCloseButton = document.getElementById('alertModalClose');
+            
+            // Get all the clickable seminar topics
+            const seminarTopics = document.querySelectorAll('.seminar-topic');
+
+            /**
+             * This function shows the custom alert box with a specific message.
+             * @param {string} message - The text to display in the modal.
+             */
+            function showCustomAlert(message) {
+                // Set the message text inside the modal
+                modalMessage.innerHTML = message;
+                // Show the modal by changing its display style and aria state
+                modalOverlay.style.display = 'flex';
+                modalOverlay.setAttribute('aria-hidden', 'false');
+                // Move focus to the close button for accessibility
+                modalCloseButton.focus();
+            }
+
+            /**
+             * This function hides the custom alert box.
+             */
+            function hideCustomAlert() {
+                modalOverlay.style.display = 'none';
+                modalOverlay.setAttribute('aria-hidden', 'true');
+            }
+
+            // --- This is the CLICK EVENT you asked for ---
+            
+            // 1. Loop over every seminar topic and add a click event listener
+            seminarTopics.forEach(function(topic) {
+                topic.addEventListener('click', function() {
+                    
+                    // Get the details from the 'data-*' attributes on the clicked element
+                    const topicName = this.dataset.topic;
+                    const topicDay = this.dataset.day;
+                    const topicTime = this.dataset.time;
+                    
+                    // Create a formatted message
+                    const message = `
+                        <strong>Topic:</strong> ${topicName}<br>
+                        <strong>Day:</strong> ${topicDay}<br>
+                        <strong>Time:</strong> ${topicTime}
+                    `;
+                    
+                    // Call our custom function to show the alert!
+                    showCustomAlert(message);
+                });
+
+                // keyboard support (Enter or Space) for the 'button-like' cell
+                topic.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        this.click();
+                    }
+                });
+            });
+
+            // 2. Add a click event to the "Close" button
+            modalCloseButton.addEventListener('click', function() {
+                hideCustomAlert();
+            });
+            
+            // 3. Add a click event to the overlay (to close by clicking outside the box)
+            modalOverlay.addEventListener('click', function(event) {
+                // Only hide if the user clicked on the overlay itself, not the box
+                if (event.target === modalOverlay) {
+                    hideCustomAlert();
+                }
+            });
+
+            // 4. Close modal with Escape key
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && modalOverlay.style.display === 'flex') {
+                    hideCustomAlert();
+                }
+            });
+
+        });
+    </script>
+
+</body>
+</html>

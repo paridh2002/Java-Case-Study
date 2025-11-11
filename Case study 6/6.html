@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>String Case Studies</title>
+    <!-- Load Tailwind CSS for modern styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Use a common, clean font */
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Style for the output boxes */
+        .output-box {
+            min-height: 50px;
+            background-color: #f3f4f6; /* Gray-100 */
+            border-radius: 0.5rem;
+            padding: 0.75rem 1rem;
+            font-family: monospace;
+            color: #1f2937; /* Gray-800 */
+            border: 1px solid #e5e7eb; /* Gray-200 */
+            word-wrap: break-word;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen p-4 md:p-8">
+
+    <div class="max-w-4xl mx-auto bg-white p-6 md:p-8 rounded-xl shadow-lg">
+        <h1 class="text-3xl font-bold text-center mb-6">String Methods Case Studies</h1>
+
+        <!-- Main Input Area -->
+        <div class="mb-8">
+            <label for="mainParagraph" class="block text-lg font-medium text-gray-700 mb-2">Enter your text or paragraph here:</label>
+            <textarea id="mainParagraph" rows="5" class="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Type or paste your text..."></textarea>
+        </div>
+
+        <!-- This grid will hold the two case studies side-by-side on medium screens and up -->
+        <div class="grid md:grid-cols-2 gap-8">
+            
+            <!-- Case Study 1: Reverse String -->
+            <div class="bg-white p-5 rounded-lg border border-gray-200">
+                <h2 class="text-xl font-semibold mb-3">Case Study 1: Reverse String</h2>
+                <p class="text-sm text-gray-600 mb-4">Reverses the entire paragraph. Demonstrates <code>split()</code>, <code>reverse()</code>, and <code>join()</code>.</p>
+                <button id="btnReverse" class="w-full bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 transition">Reverse Text</button>
+                <div id="outputReverse" class="output-box mt-4">...</div>
+            </div>
+
+            <!-- Case Study 2: Count Vowels -->
+            <div class="bg-white p-5 rounded-lg border border-gray-200">
+                <h2 class="text-xl font-semibold mb-3">Case Study 2: Count Vowels</h2>
+                <p class="text-sm text-gray-600 mb-4">Counts all vowels (a, e, i, o, u) in the text. Demonstrates <code>match()</code> and regex.</p>
+                <button id="btnCountVowels" class="w-full bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 transition">Count Vowels</button>
+                <div id="outputVowels" class="output-box mt-4">...</div>
+            </div>
+
+        </div> <!-- End of grid -->
+
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            // Get all elements
+            const mainParagraph = document.getElementById('mainParagraph');
+            
+            // Section 1: Reverse
+            const btnReverse = document.getElementById('btnReverse');
+            const outputReverse = document.getElementById('outputReverse');
+            
+            // Section 2: Vowels
+            const btnCountVowels = document.getElementById('btnCountVowels');
+            const outputVowels = document.getElementById('outputVowels');
+            
+            // --- Event Listeners ---
+
+            // 1. Reverse String
+            btnReverse.addEventListener('click', function() {
+                const text = mainParagraph.value;
+                if (!text) {
+                    outputReverse.textContent = 'Please enter some text.';
+                    return;
+                }
+                // Use split() to make an array, reverse() to flip it, join() to make a string
+                const reversedText = text.split('').reverse().join('');
+                outputReverse.textContent = reversedText;
+            });
+
+            // 2. Count Vowels
+            btnCountVowels.addEventListener('click', function() {
+                const text = mainParagraph.value;
+                if (!text) {
+                    outputVowels.textContent = 'Please enter some text.';
+                    return;
+                }
+                // Use match() with a regex
+                // [aeiou] = any of these characters
+                // g = global (don't stop at first match)
+                // i = case-insensitive
+                const matches = text.match(/[aeiou]/gi);
+                
+                const count = matches ? matches.length : 0;
+                // Correct: use template literal (backticks) so ${count} is interpolated
+                outputVowels.textContent = `Found ${count} vowels.`;
+            });
+            
+        });
+    </script>
+</body>
+</html>

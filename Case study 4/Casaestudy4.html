@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Case Study: JavaScript Functions & Palindromes</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .spinner {
+            border: 4px solid rgba(0,0,0,0.1);
+            width: 36px; height: 36px; border-radius: 50%;
+            border-left-color: #09f; animation: spin 1s linear infinite;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800">
+    <div class="container mx-auto p-4 md:p-8 max-w-4xl">
+        <header class="text-center mb-8">
+            <h1 class="text-3xl md:text-4xl font-bold text-gray-900">Case Study: JavaScript Functions</h1>
+            <p class="mt-2 text-lg text-gray-600">Checking for Palindrome Numbers</p>
+        </header>
+
+        <main class="bg-white p-6 md:p-8 rounded-xl shadow-lg">
+            <h2 class="text-2xl font-semibold mb-4">Palindrome Number Checker</h2>
+            <p class="mb-4 text-gray-600">Enter a number to see if it's a palindrome (e.g., 121).</p>
+            <div class="flex flex-col sm:flex-row gap-4">
+                <input type="number" id="numberInput" placeholder="Enter a number"
+                    class="flex-grow w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <button id="checkButton"
+                    class="w-full sm:w-auto bg-blue-600 text-white font-semibold px-6 py-2 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    Check
+                </button>
+            </div>
+
+            <div id="result"
+                 class="mt-6 p-4 text-center text-lg font-medium rounded-lg bg-gray-100 min-h-[48px] flex items-center justify-center">
+                Your result will appear here.
+            </div>
+
+            <div id="gemini-section" class="mt-4 text-center hidden">
+                <button id="gemini-button"
+                    class="bg-purple-600 text-white font-semibold px-6 py-2 rounded-lg hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500">
+                    ✨ Tell me more about palindromes
+                </button>
+                <div id="gemini-result"
+                     class="mt-4 p-4 text-left text-base rounded-lg bg-gray-50 border border-gray-200 min-h-[48px]">
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // DOM refs
+        const numberInput = document.getElementById('numberInput');
+        const checkButton = document.getElementById('checkButton');
+        const resultDiv = document.getElementById('result');
+        const geminiSection = document.getElementById('gemini-section');
+        const geminiButton = document.getElementById('gemini-button');
+        const geminiResultDiv = document.getElementById('gemini-result');
+
+        // Reverse number (works by string reverse)
+        function reverseNumber(num) {
+            const s = String(num);
+            const rev = s.split('').reverse().join('');
+            // parseInt to drop leading zeros after reversal; if you want to preserve zeros, return string instead
+            return parseInt(rev, 10);
+        }
+
+        // Check palindrome
+        const isPalindrome = (original, reversed) => original === reversed;
+
+        function handleCheck() {
+            // Use value as string first to allow big numbers; parseInt for numeric comparison
+            const rawValue = numberInput.value;
+            // Hide gemini section for new checks
+            geminiSection.classList.add('hidden');
+            geminiResultDiv.textContent = '';
+
+            if (rawValue.trim() === '') {
+                resultDiv.textContent = "Please enter a number.";
+                resultDiv.className = "mt-6 p-4 text-center text-lg font-medium rounded-lg bg-red-100 text-red-700 min-h-[48px] flex items-center justify-center";
+                return;
+            }
+
+            // parse to integer (base 10)
+            const originalNumber = parseInt(rawValue, 10);
+            if (isNaN(originalNumber)) {
+                resultDiv.textContent = "Please enter a valid number.";
+                resultDiv.className = "mt-6 p-4 text-center text-lg font-medium rounded-lg bg-red-100 text-red-700 min-h-[48px] flex items-center justify-center";
+                return;
+            }
+
+            const reversed = reverseNumber(originalNumber);
+            const isPal = isPalindrome(originalNumber, reversed);
+
+            if (isPal) {
+                resultDiv.textContent = `Yes, ${originalNumber} is a palindrome!`;
+                resultDiv.className = "mt-6 p-4 text-center text-lg font-medium rounded-lg bg-green-100 text-green-700 min-h-[48px] flex items-center justify-center";
+                geminiSection.classList.remove('hidden');
+            } else {
+                resultDiv.textContent = `No, ${originalNumber} is not a palindrome (it becomes ${reversed}).`;
+                resultDiv.className = "mt-6 p-4 text-center text-lg font-medium rounded-lg bg-yellow-100 text-yellow-800 min-h-[48px] flex items-center justify-center";
+            }
+        }
+
+        // Gemini facts (note: do not store API keys in client-side in production)
+        async function getPalindromeFacts() {
+            const inputNumber = numberInput.value || 'N/A';
+            geminiResultDiv.innerHTML = '<div class="flex justify-center items-center"><div class="spinner"></div></div>';
+
+            // Use backticks for template literal
+            const userQuery = `Tell me some fun and interesting facts about palindrome numbers, especially related to the number ${inputNumber}. Keep the response under 100 words and format it nicely with paragraphs.`;
+
+            // Placeholders — do NOT put real API keys in client-side code for production; use a server-proxy.
+            const apiKey = ""; // set server-side or via environment (not in public files)
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
+
+            try {
+                const payload = {
+                    contents: [{ parts: [{ text: userQuery }] }]
+                };
+
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) {
+                    throw new Error(`API error: ${response.status} ${response.statusText}`);
+                }
+
+                const result = await response.json();
+                const candidate = result?.candidates?.[0];
+                const partText = candidate?.content?.parts?.[0]?.text;
+
+                if (partText) {
+                    // Convert newline to <br> for simple formatting
+                    geminiResultDiv.innerHTML = partText.replace(/\n/g, '<br>');
+                } else {
+                    geminiResultDiv.textContent = "Sorry, no facts available right now. Try again later.";
+                }
+            } catch (err) {
+                console.error("Gemini API call failed:", err);
+                geminiResultDiv.textContent = "An error occurred while fetching facts. See console for details.";
+            }
+        }
+
+        // Events
+        checkButton.addEventListener('click', handleCheck);
+        geminiButton.addEventListener('click', getPalindromeFacts);
+        numberInput.addEventListener('keyup', (e) => { if (e.key === 'Enter') handleCheck(); });
+    </script>
+</body>
+</html>

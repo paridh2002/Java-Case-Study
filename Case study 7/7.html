@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript Form Events Case Study</title>
+    
+    <!-- Load Tailwind CSS for modern styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Link to your external CSS file -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center p-4">
+
+    <div class="bg-white p-8 rounded-lg shadow-xl w-full max-w-lg">
+        <h1 class="text-3xl font-bold mb-2 text-center">Create Your Account</h1>
+        <p class="text-red-500 text-sm mb-6">*Mandatory to fill</p>
+
+        <!-- Form Element -->
+        <form id="registrationForm" novalidate>
+            
+            <!-- Error Message Container -->
+            <!-- This div will be populated by JavaScript with validation errors -->
+            <div id="errorMessages" class="mb-4"></div>
+
+            <!-- Firstname -->
+            <div class="mb-4">
+                <label for="firstName" class="block text-gray-700 font-medium mb-2">Firstname:<span class="mandatory">*</span></label>
+                <input type="text" id="firstName" name="firstName" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+
+            <!-- Lastname -->
+            <div class="mb-4">
+                <label for="lastName" class="block text-gray-700 font-medium mb-2">Lastname:</label>
+                <input type="text" id="lastName" name="lastName" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+
+            <!-- Birthday -->
+            <div class="mb-4">
+                <label class="block text-gray-700 font-medium mb-2">Birthday:</label>
+                <div class="grid grid-cols-3 gap-4">
+                    <select id="day" name="day" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="">Day</option>
+                    </select>
+                    <select id="month" name="month" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="">Month</option>
+                    </select>
+                    <select id="year" name="year" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="">Year</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Username -->
+            <div class="mb-4">
+                <label for="username" class="block text-gray-700 font-medium mb-2">Username:<span class="mandatory">*</span></label>
+                <input type="text" id="username" name="username" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+
+            <!-- E-mail -->
+            <div class="mb-4">
+                <label for="email" class="block text-gray-700 font-medium mb-2">E-mail:</label>
+                <input type="email" id="email" name="email" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+
+            <!-- Website -->
+            <div class="mb-4">
+                <label for="website" class="block text-gray-700 font-medium mb-2">Website:</label>
+                <input type="text" id="website" name="website" placeholder="https://..." class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+
+            <!-- Password -->
+            <div class="mb-4">
+                <label for="password" class="block text-gray-700 font-medium mb-2">Password:<span class="mandatory">*</span></label>
+                <input type="password" id="password" name="password" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+
+            <!-- Re-password -->
+            <div class="mb-4">
+                <label for="rePassword" class="block text-gray-700 font-medium mb-2">Re-password:<span class="mandatory">*</span></label>
+                <input type="password" id="rePassword" name="rePassword" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <!-- This span will show the 'change' event in action -->
+                <span id="passwordMatchError" class="text-red-500 text-xs mt-1"></span>
+            </div>
+
+            <!-- Terms & Conditions -->
+            <div class="mb-6 flex items-center">
+                <input type="checkbox" id="terms" name="terms" class="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+                <label for="terms" class="ml-2 block text-sm text-gray-900">I agree to the terms & conditions.</label>
+            </div>
+
+            <!-- Submit Button -->
+            <div>
+                <button type="submit" class="w-full bg-black text-white font-bold py-3 px-4 rounded-lg hover:bg-gray-800 transition duration-300">
+                    Sign up
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Link to your external JavaScript file -->
+    <!-- 'defer' ensures the script runs after the HTML is parsed -->
+    <script src="script.js" defer></script>
+
+</body>
+</html>

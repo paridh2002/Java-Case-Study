@@ -1,0 +1,15 @@
+/* Note: Most styling is handled by Tailwind CSS, 
+  which is loaded in index.html. 
+  This file is for your custom styles.
+*/
+
+/* Use a common, clean font like Inter */
+body {
+    font-family: 'Inter', sans-serif;
+}
+
+/* A simple style for the red mandatory asterisk */
+.mandatory {
+    color: red;
+    margin-left: 2px;
+}
