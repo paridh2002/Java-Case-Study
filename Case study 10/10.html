@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width,initial-scale=1" />
+		<title>Music Concert Registration</title>
+		<style>
+			:root{--accent:#6c5ce7;--muted:#666;--bg:#f7f7fb}
+			body{font-family:Inter,Segoe UI,Roboto,Helvetica,Arial,sans-serif;background:var(--bg);margin:0;padding:32px;color:#222}
+			.container{max-width:900px;margin:0 auto;background:#fff;padding:28px;border-radius:12px;box-shadow:0 6px 20px rgba(20,20,40,0.08)}
+			h1{margin:0 0 8px;font-size:28px}
+			p.lead{margin:0 0 20px;color:var(--muted)}
+			form{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+			.full{grid-column:1/-1}
+			label{display:block;font-size:14px;margin-bottom:6px}
+			input[type="text"],input[type="email"],input[type="tel"],select,textarea,input[type="number"]{width:100%;padding:10px;border:1px solid #e6e6f0;border-radius:8px;font-size:14px}
+			textarea{min-height:100px;resize:vertical}
+			.row{display:flex;gap:12px;align-items:center}
+			.group{background:#fbfbff;padding:12px;border-radius:8px;border:1px solid #f0f0ff}
+			.actions{display:flex;gap:12px;align-items:center}
+			button{background:var(--accent);color:#fff;padding:10px 16px;border:0;border-radius:8px;font-weight:600;cursor:pointer}
+			button.secondary{background:#fff;color:var(--accent);border:1px solid #e6e6f0}
+			.hint{font-size:13px;color:var(--muted)}
+			.checkbox-row{display:flex;gap:12px;flex-wrap:wrap}
+			.error{color:#c0392b;font-size:13px;margin-top:6px}
+			@media (max-width:720px){form{grid-template-columns:1fr} .container{padding:18px}}
+
+			/* modal */
+			.modal{position:fixed;inset:0;display:none;place-items:center;background:rgba(0,0,0,0.45);z-index:40}
+			.modal .card{background:#fff;padding:18px;border-radius:10px;max-width:680px;width:92%;box-shadow:0 12px 40px rgba(10,10,30,0.2)}
+			.summary{font-size:14px;color:#222}
+			.summary dt{font-weight:600}
+			.summary dd{margin:0 0 12px;color:var(--muted)}
+		</style>
+	</head>
+	<body>
+		<div class="container">
+			<h1>Music Concert — Online Registration</h1>
+			<p class="lead">Register for the upcoming live music concert. Fill in your details below and choose your tickets and add-ons. This form uses client-side validation and shows a confirmation summary before finalizing.</p>
+
+			<form id="regForm" novalidate>
+				<div class="full">
+					<label for="fullname">Full name *</label>
+					<input id="fullname" name="fullname" type="text" required placeholder="Jane Doe" />
+					<div id="err-fullname" class="error" aria-live="polite"></div>
+				</div>
+
+				<div>
+					<label for="email">Email address *</label>
+					<input id="email" name="email" type="email" required placeholder="you@example.com" />
+					<div id="err-email" class="error" aria-live="polite"></div>
+				</div>
+
+				<div>
+					<label for="phone">Phone number</label>
+					<input id="phone" name="phone" type="tel" placeholder="+1 555 555 5555" />
+				</div>
+
+				<div>
+					<label for="date">Concert date *</label>
+					<select id="date" name="date" required>
+						<option value="">Choose date</option>
+						<option>Friday, Dec 19 — Evening</option>
+						<option>Saturday, Dec 20 — Evening</option>
+						<option>Sunday, Dec 21 — Matinee</option>
+					</select>
+					<div id="err-date" class="error" aria-live="polite"></div>
+				</div>
+
+				<div>
+					<label for="tickets">Number of tickets *</label>
+					<input id="tickets" name="tickets" type="number" min="1" max="10" value="1" required />
+				</div>
+
+				<div>
+					<label for="type">Ticket type *</label>
+					<select id="type" name="type" required>
+						<option value="">Choose type</option>
+						<option>General Admission</option>
+						<option>Reserved Seating</option>
+						<option>VIP Pass</option>
+						<option>Backstage Experience</option>
+					</select>
+				</div>
+
+				<div class="group full">
+					<label>Seating preference</label>
+					<div class="row">
+						<label><input type="radio" name="seat" value="Standing" checked /> Standing</label>
+						<label><input type="radio" name="seat" value="Seated" /> Seated</label>
+						<label><input type="radio" name="seat" value="Balcony" /> Balcony</label>
+					</div>
+				</div>
+
+				<div class="full">
+					<label>Add-ons</label>
+					<div class="checkbox-row">
+						<label><input type="checkbox" name="addons" value="Parking" /> Parking</label>
+						<label><input type="checkbox" name="addons" value="Merch Pack" /> Merchandise pack</label>
+						<label><input type="checkbox" name="addons" value="Meet & Greet" /> Meet & Greet</label>
+					</div>
+				</div>
+
+				<div class="full">
+					<label for="requests">Special requests (accessibility, dietary, etc.)</label>
+					<textarea id="requests" name="requests" placeholder="Let us know any accessibility needs or questions"></textarea>
+				</div>
+
+				<div>
+					<label>Payment method *</label>
+					<div class="row">
+						<label><input type="radio" name="payment" value="Card" checked /> Card</label>
+						<label><input type="radio" name="payment" value="PayPal" /> PayPal</label>
+					</div>
+				</div>
+
+				<div>
+					<label for="promo">Promo code (optional)</label>
+					<input id="promo" name="promo" type="text" placeholder="PROMO2025" />
+				</div>
+
+				<div class="full">
+					<label><input id="terms" name="terms" type="checkbox" required /> I agree to the terms and event policy *</label>
+					<div id="err-terms" class="error" aria-live="polite"></div>
+				</div>
+
+				<div class="full actions">
+					<button id="submitBtn" type="submit">Review & Continue</button>
+					<button type="button" class="secondary" id="resetBtn">Reset</button>
+					<div class="hint">We'll never share your personal info. This is a demo form (no real payment).</div>
+				</div>
+			</form>
+		</div>
+
+		<div class="modal" id="modal">
+			<div class="card" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+				<h2 id="modalTitle">Confirm Your Registration</h2>
+				<p class="hint">Review details before finalizing. Click Confirm to complete the registration (demo).</p>
+				<dl class="summary" id="summary"></dl>
+				<div style="display:flex;gap:10px;justify-content:flex-end;margin-top:12px">
+					<button id="confirmBtn">Confirm registration</button>
+					<button id="closeBtn" class="secondary">Edit</button>
+				</div>
+			</div>
+		</div>
+
+		<script>
+			// Basic client-side validation + summary modal
+			const form = document.getElementById('regForm');
+			const modal = document.getElementById('modal');
+			const summary = document.getElementById('summary');
+
+			function clearErrors(){
+				document.querySelectorAll('.error').forEach(e=>e.textContent='');
+			}
+
+			function gatherData(){
+				const fd = new FormData(form);
+				const data = {};
+				fd.forEach((v,k)=>{
+					if (k in data) {
+						// convert repeated fields to array
+						if (!Array.isArray(data[k])) data[k]=[data[k]];
+						data[k].push(v);
+					} else data[k]=v;
+				});
+				// collect checkboxes named addons
+				const addons = Array.from(document.querySelectorAll('input[name="addons"]:checked')).map(i=>i.value);
+				data.addons = addons.length?addons:['None'];
+				// seating
+				const seat = document.querySelector('input[name="seat"]:checked')?.value || '';
+				data.seat = seat;
+				return data;
+			}
+
+			function validate(){
+				clearErrors();
+				let ok = true;
+				const name = form.fullname.value.trim();
+				if (!name){document.getElementById('err-fullname').textContent='Please enter your full name.'; ok=false}
+				const email = form.email.value.trim();
+				if (!email){document.getElementById('err-email').textContent='Please enter an email address.'; ok=false}
+				else if (!/^\S+@\S+\.\S+$/.test(email)){document.getElementById('err-email').textContent='Please enter a valid email address.'; ok=false}
+				if (!form.date.value){document.getElementById('err-date').textContent='Please select a concert date.'; ok=false}
+				if (!form.tickets.value || Number(form.tickets.value) < 1){document.getElementById('tickets').value = 1}
+				if (!form.terms.checked){document.getElementById('err-terms').textContent='You must agree to the terms to continue.'; ok=false}
+				return ok;
+			}
+
+			form.addEventListener('submit', e=>{
+				e.preventDefault();
+				if (!validate()) return;
+				const data = gatherData();
+				// build summary
+				summary.innerHTML = '';
+				const addRow = (k,v)=>{
+					const dt = document.createElement('dt'); dt.textContent = k;
+					const dd = document.createElement('dd'); dd.textContent = v;
+					summary.appendChild(dt); summary.appendChild(dd);
+				}
+				addRow('Name', data.fullname || '');
+				addRow('Email', data.email || '');
+				addRow('Phone', data.phone || '—');
+				addRow('Date', data.date || '');
+				addRow('Tickets', data.tickets || '1');
+				addRow('Ticket type', data.type || '');
+				addRow('Seating', data.seat || '');
+				addRow('Add-ons', (data.addons || []).join(', '));
+				addRow('Payment', data.payment || '');
+				addRow('Promo code', data.promo || '—');
+				addRow('Special requests', data.requests || '—');
+
+				modal.style.display = 'grid';
+				// focus confirm for keyboard users
+				document.getElementById('confirmBtn').focus();
+			});
+
+			document.getElementById('closeBtn').addEventListener('click', ()=>{ modal.style.display='none' });
+			document.getElementById('resetBtn').addEventListener('click', ()=>{ form.reset(); clearErrors(); });
+
+			document.getElementById('confirmBtn').addEventListener('click', ()=>{
+				// simulate final submission
+				modal.querySelector('.card').innerHTML = '<h2>Thank you!</h2><p class="hint">Your registration is complete. A confirmation email would be sent in a real system.</p>' +
+					'<p style="margin-top:12px"><button id="doneBtn">Close</button></p>';
+				document.getElementById('doneBtn').addEventListener('click', ()=>{ modal.style.display='none'; form.reset(); });
+			});
+
+			// close modal on outside click
+			modal.addEventListener('click', (e)=>{ if (e.target === modal) modal.style.display='none' });
+		</script>
+	</body>
+</html>
